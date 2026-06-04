@@ -4,7 +4,7 @@ import { GROUPS, wordsForGroup } from '../game/assignment';
 import { getBookmarkImage } from '../data/images';
 import { theme } from '../theme';
 
-export default function WordsScreen({ assignment, groupKey, sessionCode, onBack }) {
+export default function WordsScreen({ assignment, groupKey, sessionCode, onNewGame, onBack }) {
   const group = GROUPS[groupKey];
   const rows = useMemo(() => wordsForGroup(assignment, groupKey), [assignment, groupKey]);
 
@@ -38,6 +38,13 @@ export default function WordsScreen({ assignment, groupKey, sessionCode, onBack 
           </View>
         )}
       />
+
+      <Pressable
+        style={({ pressed }) => [styles.newGameButton, pressed && styles.pressed]}
+        onPress={onNewGame}
+      >
+        <Text style={styles.newGameText}>Start New Game</Text>
+      </Pressable>
     </View>
   );
 }
@@ -64,4 +71,13 @@ const styles = StyleSheet.create({
   rowText: { flex: 1 },
   word: { color: theme.text, fontSize: 22, fontWeight: '700', textTransform: 'capitalize' },
   meta: { color: theme.muted, fontSize: 13, marginTop: 2, textTransform: 'capitalize' },
+  newGameButton: {
+    backgroundColor: theme.accent,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  newGameText: { color: '#1c1a2e', fontSize: 17, fontWeight: '800' },
+  pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });

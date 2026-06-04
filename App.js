@@ -34,6 +34,12 @@ export default function App() {
     setScreen('words');
   }
 
+  function startNewGame() {
+    setGroupKey(null);
+    setSessionCode(null);
+    setScreen('home');
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="light" />
@@ -53,6 +59,7 @@ export default function App() {
           assignment={assignment}
           groupKey={groupKey}
           sessionCode={sessionCode}
+          onNewGame={startNewGame}
           onBack={() => setScreen('group')}
         />
       )}
