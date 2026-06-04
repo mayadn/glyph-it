@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: glyph-it
+    runtime: static
+    # --include=dev ensures babel/build tooling is installed even if
+    # Render sets NODE_ENV=production during the build.
+    buildCommand: npm install --include=dev && npx expo export --platform web
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    # Single-page app: send all paths to index.html.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate

@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Glyph-it",
+    "slug": "glyph-it",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#1c1a2e",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.glyphit.app"
+    },
+    "android": {
+      "package": "com.glyphit.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
