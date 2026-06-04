@@ -6,6 +6,8 @@ import {
   Pressable,
   StyleSheet,
   KeyboardAvoidingView,
+  ScrollView,
+  Keyboard,
   Platform,
 } from 'react-native';
 import { generateSessionCode } from '../game/rng';
@@ -17,6 +19,7 @@ export default function HomeScreen({ sessionCode, onStartSession }) {
 
   function handleNewGame() {
     setError('');
+    Keyboard.dismiss();
     const code = generateSessionCode();
     onStartSession(code);
   }
@@ -28,42 +31,50 @@ export default function HomeScreen({ sessionCode, onStartSession }) {
       return;
     }
     setError('');
+    Keyboard.dismiss();
     onStartSession(trimmed);
   }
 
+  const canJoin = /^\d{4}$/.test(joinCode);
+
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={styles.header}>
-        <Text style={styles.title}>Glyph-it</Text>
-        <Text style={styles.subtitle}>The bookmark word game</Text>
-      </View>
-
-      {sessionCode ? (
-        <View style={styles.codeBox}>
-          <Text style={styles.codeLabel}>Current session code</Text>
-          <Text style={styles.codeValue}>{sessionCode}</Text>
-          <Text style={styles.codeHint}>Share this code with everyone at the table.</Text>
-        </View>
-      ) : null}
-
-      <Pressable
-        style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}
-        onPress={handleNewGame}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.primaryButtonText}>New Game</Text>
-        <Text style={styles.primaryButtonSub}>Organizer · generates a code</Text>
-      </Pressable>
+        <View style={styles.header}>
+          <Text style={styles.title}>Glyph-it</Text>
+          <Text style={styles.subtitle}>The bookmark word game</Text>
+        </View>
 
-      <View style={styles.divider}>
-        <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or join</Text>
-        <View style={styles.dividerLine} />
-      </View>
+        {sessionCode ? (
+          <View style={styles.codeBox}>
+            <Text style={styles.codeLabel}>Current session code</Text>
+            <Text style={styles.codeValue}>{sessionCode}</Text>
+            <Text style={styles.codeHint}>Share this code with everyone at the table.</Text>
+          </View>
+        ) : null}
 
-      <View style={styles.joinRow}>
+        <Pressable
+          style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}
+          onPress={handleNewGame}
+        >
+          <Text style={styles.primaryButtonText}>New Game</Text>
+          <Text style={styles.primaryButtonSub}>Organizer · generates a code</Text>
+        </Pressable>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or join</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <Text style={styles.joinLabel}>Enter the 4-digit code</Text>
         <TextInput
           style={styles.input}
           value={joinCode}
@@ -71,25 +82,35 @@ export default function HomeScreen({ sessionCode, onStartSession }) {
           placeholder="0000"
           placeholderTextColor={theme.muted}
           keyboardType="number-pad"
+          inputMode="numeric"
           maxLength={4}
+          returnKeyType="go"
+          onSubmitEditing={handleJoin}
         />
         <Pressable
-          style={({ pressed }) => [styles.joinButton, pressed && styles.pressed]}
+          style={({ pressed }) => [
+            styles.joinButton,
+            !canJoin && styles.joinButtonDisabled,
+            pressed && styles.pressed,
+          ]}
           onPress={handleJoin}
         >
-          <Text style={styles.joinButtonText}>Join</Text>
+          <Text style={styles.joinButtonText}>Join Game</Text>
         </Pressable>
-      </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1, backgroundColor: theme.bg },
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.bg,
     paddingHorizontal: 28,
+    paddingVertical: 32,
     justifyContent: 'center',
   },
   header: { alignItems: 'center', marginBottom: 36 },
@@ -125,15 +146,15 @@ const styles = StyleSheet.create({
   divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 24 },
   dividerLine: { flex: 1, height: 1, backgroundColor: theme.border },
   dividerText: { color: theme.muted, marginHorizontal: 12, fontSize: 13 },
-  joinRow: { flexDirection: 'row', gap: 12 },
+  joinLabel: { color: theme.muted, fontSize: 14, marginBottom: 8, textAlign: 'center' },
   input: {
-    flex: 1,
     backgroundColor: theme.surface,
     borderRadius: 14,
+    paddingVertical: 14,
     paddingHorizontal: 18,
-    fontSize: 26,
+    fontSize: 30,
     color: theme.text,
-    letterSpacing: 6,
+    letterSpacing: 10,
     textAlign: 'center',
     borderWidth: 1,
     borderColor: theme.border,
@@ -141,11 +162,13 @@ const styles = StyleSheet.create({
   joinButton: {
     backgroundColor: theme.surface,
     borderRadius: 14,
-    paddingHorizontal: 26,
-    justifyContent: 'center',
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 12,
     borderWidth: 1,
     borderColor: theme.border,
   },
+  joinButtonDisabled: { opacity: 0.5 },
   joinButtonText: { color: theme.text, fontSize: 18, fontWeight: '700' },
   error: { color: '#ff8787', marginTop: 12, textAlign: 'center' },
 });
