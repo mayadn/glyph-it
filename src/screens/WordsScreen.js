@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.border,
   },
-  thumb: { width: 52, height: 52, marginRight: 16 },
+  thumb: { width: 104, height: 104, marginRight: 18 },
   rowText: { flex: 1 },
   word: { color: theme.text, fontSize: 22, fontWeight: '700', textTransform: 'capitalize' },
   meta: { color: theme.muted, fontSize: 13, marginTop: 2, textTransform: 'capitalize' },
