@@ -5,7 +5,7 @@ dist-check/
 web-build/
 *.log
 .DS_Store
-glyph-it-web.zip
+glyph-it-web*.zip
 
 # Generated print materials (reproducible via tools/*.py)
 cards/
