@@ -19,7 +19,7 @@ export default function WordsScreen({ assignment, groupKey, sessionCode, onNewGa
 
       <View style={[styles.groupHeader, { backgroundColor: group.color }]}>
         <Text style={styles.groupName}>{group.name}</Text>
-        <Text style={styles.groupSub}>Your 8 words</Text>
+        <Text style={styles.groupSub}>Your {rows.length} words</Text>
       </View>
 
       <FlatList

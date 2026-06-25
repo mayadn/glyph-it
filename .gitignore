@@ -6,3 +6,7 @@ web-build/
 *.log
 .DS_Store
 glyph-it-web.zip
+
+# Generated print materials (reproducible via tools/*.py)
+cards/
+sheets/

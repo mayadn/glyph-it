@@ -10,18 +10,18 @@ export const GROUPS = {
 };
 
 // Given a 4-digit session code, deterministically assign one word to each
-// of the 12 bookmarks. The same code always yields the same assignment on
-// any device, with no data transmitted.
+// bookmark. The same code always yields the same assignment on any device,
+// with no data transmitted.
 //
 // Returns an array of { id, image, block, word }, ordered by bookmark id.
 export function buildAssignment(code) {
   const seed = parseInt(code, 10) || 0;
 
-  // Pick 12 unique words by shuffling the full word bank with the seed
-  // and taking the first 12. Bookmark i (sorted by id) gets word i.
-  const shuffledWords = seededShuffle(words, seed).slice(0, 12);
-
   const sortedBookmarks = bookmarks.slice().sort((a, b) => a.id - b.id);
+
+  // Pick one unique word per bookmark by shuffling the full word bank with the
+  // seed and taking the first N. Bookmark i (sorted by id) gets word i.
+  const shuffledWords = seededShuffle(words, seed).slice(0, sortedBookmarks.length);
 
   return sortedBookmarks.map((bookmark, index) => ({
     ...bookmark,
@@ -29,7 +29,7 @@ export function buildAssignment(code) {
   }));
 }
 
-// Filter a full assignment down to the 8 bookmarks a group can see,
+// Filter a full assignment down to the bookmarks a group can see,
 // ordered by the group's first block then second block (by id within each).
 export function wordsForGroup(assignment, groupKey) {
   const group = GROUPS[groupKey];
