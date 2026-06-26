@@ -1,6 +1,6 @@
 # Glyph-it
 
-A cross-platform mobile app (React Native + Expo) that accompanies the **Glyph-it** physical board game. Players sit together in groups; the app assigns random words to 9 visual bookmarks and reveals only the words relevant to each group.
+A cross-platform mobile app (React Native + Expo) that accompanies the **Glyph-it** physical board game. Players sit together in groups; the app assigns random words to 6 visual bookmarks and reveals only the words relevant to each group.
 
 ## How it works
 
@@ -11,7 +11,7 @@ A cross-platform mobile app (React Native + Expo) that accompanies the **Glyph-i
 
 ### Group → block mapping
 
-There are 9 bookmarks split into 3 color blocks (3 each): `yellow`, `red`, `blue`. Each group sees exactly the 6 words from its two blocks:
+There are 6 bookmarks split into 3 color blocks (2 each): `yellow`, `red`, `blue`. Each group sees exactly the 4 words from its two blocks:
 
 | Group  | Blocks         | Does NOT see |
 |--------|----------------|--------------|
@@ -23,13 +23,13 @@ There are 9 bookmarks split into 3 color blocks (3 each): `yellow`, `red`, `blue
 
 1. **Home** — New Game (generates code) / Join Game (enter code). Shows the current code.
 2. **Group Selection** — pick Orange, Green, or Purple. Includes Reshuffle (new code).
-3. **My Words** — the group's 6 bookmarks (image thumbnail + word), ordered by block then bookmark id. Back preserves the session.
+3. **My Words** — the group's 4 bookmarks (image thumbnail + word), ordered by block then bookmark id. Back preserves the session.
 
 ## Project structure
 
 ```
 assets/
-  bookmark*.png                    # 9 glyph bookmark images (ids 1,2,4,6,7,8,9,11,12)
+  bookmark*.png                    # 6 glyph bookmark images (ids 1,2,6,7,11,12)
   bookmarks.json                   # id, image, block (color) for each bookmark
   words.json                       # full word bank
 src/
@@ -53,5 +53,5 @@ Requires [Node.js](https://nodejs.org/) and the [Expo](https://docs.expo.dev/) t
 ## Customizing the game data
 
 - Edit `assets/words.json` to change the word bank (any length ≥ number of bookmarks).
-- Edit `assets/bookmarks.json` to reassign which bookmark belongs to which color block. Keep an equal number of bookmarks per block (`yellow`, `red`, `blue`) — currently 3 each.
+- Edit `assets/bookmarks.json` to reassign which bookmark belongs to which color block. Keep an equal number of bookmarks per block (`yellow`, `red`, `blue`) — currently 2 each.
 - Replace the `bookmarkN.png` images to use your own glyph art (keep the filenames or update both `bookmarks.json` and `src/data/images.js`).

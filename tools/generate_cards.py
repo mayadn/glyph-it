@@ -4,11 +4,11 @@ Produces every valid picture pair (one glyph from each of the two blocks of a
 group) as a 5 cm x 8 cm card with one picture on top and one on the bottom,
 then lays the cards out on A4 pages (max cards per page) for printing.
 
-Blocks (by bookmark id), 3 glyphs each:
-    yellow = 1,2,4   red = 6,7,8   blue = 9,11,12
+Blocks (by bookmark id), 2 glyphs each:
+    yellow = 1,2   red = 6,7   blue = 11,12
 Groups (two blocks each):
     Orange = yellow x red, Green = yellow x blue, Purple = red x blue
-=> 9 pairs per group, 27 cards total.
+=> 4 pairs per group, 12 cards total.
 
 Output (in ./cards):
     page_1.png .. page_N.png   one A4 page each (300 DPI)
@@ -33,9 +33,9 @@ INNER_PAD_MM = 4    # padding between picture and card edge
 GAP_MM = 2          # gap between the two pictures on a card
 
 BLOCKS = {
-    "yellow": [1, 2, 4],
-    "red": [6, 7, 8],
-    "blue": [9, 11, 12],
+    "yellow": [1, 2],
+    "red": [6, 7],
+    "blue": [11, 12],
 }
 GROUPS = {
     "orange": ("yellow", "red"),

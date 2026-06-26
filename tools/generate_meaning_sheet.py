@@ -26,11 +26,11 @@ A4_W_MM, A4_H_MM = 210, 297
 MARGIN_MM = 12
 CELL_PAD_MM = 3
 
-# Block order as requested: red, yellow, blue. 3 glyphs per block.
+# Block order as requested: red, yellow, blue. 2 glyphs per block.
 BLOCKS_ORDER = [
-    ("red", [6, 7, 8], (255, 224, 224)),
-    ("yellow", [1, 2, 4], (255, 247, 205)),
-    ("blue", [9, 11, 12], (219, 234, 255)),
+    ("red", [6, 7], (255, 224, 224)),
+    ("yellow", [1, 2], (255, 247, 205)),
+    ("blue", [11, 12], (219, 234, 255)),
 ]
 
 HEADERS = ["Glyph", "Optional Meaning", "Optional Meaning",

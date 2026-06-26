@@ -23,7 +23,7 @@ python tools/generate_cards.py
 
 Output (`cards/`): `page_1.png … page_N.png` (A4, 300 DPI) + `cards.pdf`.
 
-With 3 glyphs per block: 3×3 = 9 pairs per group → **27 cards**, 12 per A4 page → **3 pages**.
+With 2 glyphs per block: 2×2 = 4 pairs per group → **12 cards**, 12 per A4 page → **1 page**.
 
 ### `generate_meaning_sheet.py`
 Generates an A4 worksheet: a table with one row per glyph (grouped and tinted by
