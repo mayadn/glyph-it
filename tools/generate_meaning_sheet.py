@@ -1,19 +1,21 @@
-"""Generate an A4 worksheet listing all 12 glyphs with meaning columns.
+"""Generate an A4 worksheet listing every glyph with meaning columns.
 
 Table: 5 columns x (1 header row + one row per glyph).
-  Col 1: "Glyph"           -> the 12 bookmark images, grouped by block
+  Col 1: "Glyph"           -> the glyph images (shared glyph first, then blocks)
   Col 2: "Optional Meaning"
   Col 3: "Optional Meaning"
   Col 4: "Optional Meaning"
   Col 5: "Final Meaning"
 
-Rows are grouped (and tinted) by block in the order: red, yellow, blue.
+Rows: the shared glyph first, then block glyphs in the order red, yellow, blue
+(each row tinted by its block colour).
 
 Output (in ./sheets):
     glyph_meanings.png   A4 page at 300 DPI
     glyph_meanings.pdf   same, for printing
 """
 
+import os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -41,7 +43,29 @@ HEADER_FG = (255, 255, 255)
 GRID = (120, 120, 120)
 BG = (255, 255, 255)
 
-FONT_BOLD = "C:/Windows/Fonts/arialbd.ttf"
+# The shared glyph (id 99) is known to every team; it heads the sheet so each
+# player keeps it in view while deducing the unknown block glyphs.
+SHARED_ID = 99
+SHARED_IMAGE = "bookmark_shared.png"
+SHARED_TINT = (245, 232, 199)  # soft gold row
+
+# Use Arial on Windows, fall back to a bundled font elsewhere (e.g. Linux/CI).
+FONT_CANDIDATES = [
+    "C:/Windows/Fonts/arialbd.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+]
+
+
+def load_bold_font(size: int) -> ImageFont.FreeTypeFont:
+    for path in FONT_CANDIDATES:
+        if os.path.exists(path):
+            return ImageFont.truetype(path, size)
+    return ImageFont.load_default()
+
+
+def glyph_filename(gid: int) -> str:
+    return SHARED_IMAGE if gid == SHARED_ID else f"bookmark{gid}.png"
 
 
 def mm(v: float) -> int:
@@ -57,7 +81,7 @@ def fit(img: Image.Image, max_w: int, max_h: int) -> Image.Image:
 def main() -> None:
     OUT_DIR.mkdir(exist_ok=True)
 
-    n_glyphs = sum(len(ids) for _name, ids, _color in BLOCKS_ORDER)
+    n_glyphs = 1 + sum(len(ids) for _name, ids, _color in BLOCKS_ORDER)
 
     page_w, page_h = mm(A4_W_MM), mm(A4_H_MM)
     margin = mm(MARGIN_MM)
@@ -85,10 +109,10 @@ def main() -> None:
     page = Image.new("RGB", (page_w, page_h), BG)
     draw = ImageDraw.Draw(page)
 
-    header_font = ImageFont.truetype(FONT_BOLD, mm(4))
+    header_font = load_bold_font(mm(4))
 
-    # Ordered list of (block_color) per row.
-    ordered = []
+    # Ordered list of (glyph id, row colour). The shared glyph leads the sheet.
+    ordered = [(SHARED_ID, SHARED_TINT)]
     for _name, ids, color in BLOCKS_ORDER:
         for gid in ids:
             ordered.append((gid, color))
@@ -110,7 +134,7 @@ def main() -> None:
         draw.rectangle([margin, y0, margin + table_w, y1], fill=color)
 
         # Glyph image in the first column, centered.
-        glyph = Image.open(ASSETS / f"bookmark{gid}.png").convert("RGBA")
+        glyph = Image.open(ASSETS / glyph_filename(gid)).convert("RGBA")
         glyph = fit(glyph, glyph_col_w - 2 * pad, row_h - 2 * pad)
         gx = col_x[0] + (glyph_col_w - glyph.width) // 2
         gy = y0 + (row_h - glyph.height) // 2

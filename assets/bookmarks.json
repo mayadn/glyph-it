@@ -4,5 +4,6 @@
   { "id": 6,  "image": "bookmark6.png",  "block": "red" },
   { "id": 7,  "image": "bookmark7.png",  "block": "red" },
   { "id": 11, "image": "bookmark11.png", "block": "blue" },
-  { "id": 12, "image": "bookmark12.png", "block": "blue" }
+  { "id": 12, "image": "bookmark12.png", "block": "blue" },
+  { "id": 99, "image": "bookmark_shared.png", "block": "shared" }
 ]

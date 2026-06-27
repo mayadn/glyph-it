@@ -7,6 +7,7 @@ const IMAGES = {
   'bookmark7.png': require('../../assets/bookmark7.png'),
   'bookmark11.png': require('../../assets/bookmark11.png'),
   'bookmark12.png': require('../../assets/bookmark12.png'),
+  'bookmark_shared.png': require('../../assets/bookmark_shared.png'),
 };
 
 export function getBookmarkImage(filename) {

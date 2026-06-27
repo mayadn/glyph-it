@@ -8,7 +8,10 @@ Blocks (by bookmark id), 2 glyphs each:
     yellow = 1,2   red = 6,7   blue = 11,12
 Groups (two blocks each):
     Orange = yellow x red, Green = yellow x blue, Purple = red x blue
-=> 4 pairs per group, 12 cards total.
+=> 4 pairs per group, 12 team cards.
+
+The shared glyph (id 99) is known to every team. It is paired with each of the
+six block glyphs to make 6 "shared" centre cards (gold frame). Total: 18 cards.
 
 Output (in ./cards):
     page_1.png .. page_N.png   one A4 page each (300 DPI)
@@ -43,11 +46,16 @@ GROUPS = {
     "purple": ("red", "blue"),
 }
 
+# The shared glyph is known to all teams and sits on the central cards.
+SHARED_ID = 99
+SHARED_IMAGE = "bookmark_shared.png"
+
 # Border colour per group, so each card shows which group it belongs to.
 GROUP_COLORS = {
     "orange": (232, 115, 28),
     "green": (47, 158, 68),
     "purple": (112, 72, 232),
+    "shared": (201, 162, 39),  # gold frame marks the central shared cards
 }
 
 BORDER_MM = 2          # thickness of the coloured group frame
@@ -59,8 +67,12 @@ def mm(value_mm: float) -> int:
     return round(value_mm / 25.4 * DPI)
 
 
+def glyph_filename(bookmark_id: int) -> str:
+    return SHARED_IMAGE if bookmark_id == SHARED_ID else f"bookmark{bookmark_id}.png"
+
+
 def load_glyph(bookmark_id: int) -> Image.Image:
-    img = Image.open(ASSETS / f"bookmark{bookmark_id}.png").convert("RGBA")
+    img = Image.open(ASSETS / glyph_filename(bookmark_id)).convert("RGBA")
     return img
 
 
@@ -71,11 +83,14 @@ def fit(img: Image.Image, max_w: int, max_h: int) -> Image.Image:
 
 
 def build_pairs():
-    """Return list of (top_id, bottom_id, group) for all 48 cards."""
+    """Return list of (top_id, bottom_id, group): 12 team cards + 6 shared."""
     pairs = []
     for group, (block_a, block_b) in GROUPS.items():
         for top_id, bottom_id in product(BLOCKS[block_a], BLOCKS[block_b]):
             pairs.append((top_id, bottom_id, group))
+    # Shared centre cards: the shared glyph paired with every block glyph.
+    for bottom_id in [gid for ids in BLOCKS.values() for gid in ids]:
+        pairs.append((SHARED_ID, bottom_id, "shared"))
     return pairs
 
 
@@ -109,6 +124,7 @@ def render_card(top_id: int, bottom_id: int, group: str, glyphs: dict) -> Image.
 def main() -> None:
     OUT_DIR.mkdir(exist_ok=True)
     glyphs = {gid: load_glyph(gid) for ids in BLOCKS.values() for gid in ids}
+    glyphs[SHARED_ID] = load_glyph(SHARED_ID)
     pairs = build_pairs()
 
     card_w, card_h = mm(CARD_W_MM), mm(CARD_H_MM)

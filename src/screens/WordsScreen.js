@@ -19,7 +19,7 @@ export default function WordsScreen({ assignment, groupKey, sessionCode, onNewGa
 
       <View style={[styles.groupHeader, { backgroundColor: group.color }]}>
         <Text style={styles.groupName}>{group.name}</Text>
-        <Text style={styles.groupSub}>Your {rows.length} words</Text>
+        <Text style={styles.groupSub}>Your {rows.length} words · incl. 1 shared</Text>
       </View>
 
       <FlatList
@@ -27,14 +27,15 @@ export default function WordsScreen({ assignment, groupKey, sessionCode, onNewGa
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
-          <View style={styles.row}>
+          <View style={[styles.row, item.shared && styles.sharedRow]}>
             <Image source={getBookmarkImage(item.image)} style={styles.thumb} resizeMode="contain" />
             <View style={styles.rowText}>
               <Text style={styles.word}>{item.word}</Text>
               <Text style={styles.meta}>
-                Bookmark {item.id} · {item.block}
+                {item.shared ? 'Shared · known to all teams' : `Glyph ${item.id} · ${item.block}`}
               </Text>
             </View>
+            {item.shared ? <Text style={styles.sharedBadge}>SHARED</Text> : null}
           </View>
         )}
       />
@@ -67,10 +68,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.border,
   },
+  sharedRow: {
+    borderColor: theme.accent,
+    borderWidth: 2,
+    backgroundColor: theme.surface,
+  },
   thumb: { width: 104, height: 104, marginRight: 18 },
   rowText: { flex: 1 },
   word: { color: theme.text, fontSize: 22, fontWeight: '700', textTransform: 'capitalize' },
   meta: { color: theme.muted, fontSize: 13, marginTop: 2, textTransform: 'capitalize' },
+  sharedBadge: {
+    color: theme.accent,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    alignSelf: 'flex-start',
+  },
   newGameButton: {
     backgroundColor: theme.accent,
     borderRadius: 14,
