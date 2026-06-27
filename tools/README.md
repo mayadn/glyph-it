@@ -39,11 +39,26 @@ python tools/generate_meaning_sheet.py
 
 Output (`sheets/`): `glyph_meanings.png` (A4, 300 DPI) + `glyph_meanings.pdf`.
 
+### `generate_player_sheet.py`
+Generates the **player board** each team uses during play: a table with one row
+per glyph (the **shared glyph first** in gold, then the block glyphs grouped and
+tinted by block) with a write-in `Meaning` line, a knows-matrix for the three
+teams (`Orange / Purple / Green` — ✓ if that team knows the glyph, — if not; the
+shared glyph is ✓ for all), and a `ROUNDS` log.
+
+```bash
+python tools/generate_player_sheet.py
+```
+
+Output (`sheets/`): `glyph_it_player_sheet_A6.pdf` (+ `.png` preview) and
+`glyph_it_player_sheet_A4_4up.pdf` (four A6 boards tiled on A4 with cut guides).
+
 ## Changing the glyph set
 
-Both scripts define the glyphs per colour block near the top of the file
-(`BLOCKS` in `generate_cards.py`, `BLOCKS_ORDER` in `generate_meaning_sheet.py`),
-using bookmark ids that match `assets/bookmarkN.png`, plus the shared glyph
+All scripts define the glyphs per colour block near the top of the file
+(`BLOCKS` in `generate_cards.py`, `BLOCKS_ORDER` in `generate_meaning_sheet.py`,
+`ROWS` in `generate_player_sheet.py`), using bookmark ids that match
+`assets/bookmarkN.png`, plus the shared glyph
 (`SHARED_ID = 99` → `assets/bookmark_shared.png`). Keep these in sync with
 `assets/bookmarks.json` so the app and the printed material agree. The layouts
 (cards-per-page, table rows) adjust automatically to the number of glyphs.

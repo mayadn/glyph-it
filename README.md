@@ -62,3 +62,4 @@ Requires [Node.js](https://nodejs.org/) and the [Expo](https://docs.expo.dev/) t
 
 - `generate_cards.py` → `cards/` : 12 team cards (orange/green/purple frames) + 6 shared centre cards (gold frame: the shared glyph paired with each block glyph) = **18 cards**, laid out on A4.
 - `generate_meaning_sheet.py` → `sheets/` : per-player worksheet listing every glyph (shared glyph first) with columns for tracking guessed meanings.
+- `generate_player_sheet.py` → `sheets/` : the **player board** each team uses — every glyph (shared first, in gold) with a write-in meaning line, a knows-matrix for the three teams, and a ROUNDS log. Outputs `glyph_it_player_sheet_A6.pdf` and `glyph_it_player_sheet_A4_4up.pdf`.
